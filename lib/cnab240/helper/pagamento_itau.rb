@@ -20,12 +20,16 @@ module Cnab240
     end
 
     def add_lote(campos = {})
+      campos[:controle_banco] ||= '341'
+      campos[:arquivo_codigo] ||= '1'
+      campos[:banco_nome] ||= 'BANCO ITAU'
+
       @arquivo.lotes << lote = Cnab240::Lote.new(:operacao => :pagamento, :tipo => :remessa, :versao => 'V80')
 
       campos[:servico_operacao] ||= 'C'
-      campos[:controle_lote] ||= '0001'
+      campos[:controle_lote] ||= @arquivo.lotes.length.to_s
 
-      fill campos, lote.header
+      fill campos, lote.header, lote.trailer
     end
 
     def <<(campos)
