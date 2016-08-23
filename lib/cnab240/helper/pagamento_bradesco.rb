@@ -43,5 +43,17 @@ module Cnab240
 
       lote << segmento_a
     end
+
+    def self.build(movements = {})
+      movements = JSON.parse(movements) if movements.is_a? String
+      movements = [movements] unless movements.is_a? Array
+      cnab = Cnab240::PagamentoBradesco.new(paying(movements.first))
+
+      movements.each{ |movement|
+        cnab.add_lote(paying(movement)) unless movements.first == movement
+        cnab << favored(movement)
+      }
+      cnab.string
+    end
   end
 end

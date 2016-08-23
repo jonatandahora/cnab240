@@ -1,6 +1,9 @@
 require 'cnab240/version'
 
 require 'bindata'
+require 'json'
+require 'yaml'
+require 'i18n'
 
 require 'cnab240/ext/attribute_accessors'
 require 'cnab240/ext/bindata'
@@ -117,6 +120,11 @@ require 'cnab240/helper/transferencia_citibank'
 require 'cnab240/helper/boleto_bancoob'
 
 module Cnab240
+  relative_config = '../../config/kiik.yml'
+  path = File.expand_path(relative_config, __FILE__)
+  $kiik_compensation = YAML.load_file(path)
+  I18n.config.available_locales = :en
+
   mod_attr_accessor :defaults
   @@defaults = {}
 
